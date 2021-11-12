@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier    
 from sklearn import metrics
 from sklearn.metrics import confusion_matrix, classification_report,plot_confusion_matrix
-from imblearn.under_sampling import RandomUnderSampler
+#from imblearn.under_sampling import RandomUnderSampler
 import warnings
 warnings.filterwarnings(True)
 
@@ -23,8 +23,8 @@ y=df['Outcome']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 30)
 
 #Resampling the data
-rus= RandomUnderSampler(sampling_strategy='not minority',random_state=30)
-X_train_u,y_train_u= rus.fit_resample(X_train,y_train)
+# rus= RandomUnderSampler(sampling_strategy='not minority',random_state=30)
+# X_train_u,y_train_u= rus.fit_resample(X_train,y_train)
 
 
 #Adding a header
@@ -52,15 +52,15 @@ def prediction(glucose,bp,preg,skin_thk,insulin,bmi,diab,age):
 	
 	dtree_clf_u= DecisionTreeClassifier(random_state = 42,criterion='entropy',max_depth=6,
 	min_samples_leaf=7,min_samples_split=5)
-	dtree_clf_u.fit(X_train_u, y_train_u)
-	y_train_pred_u = dtree_clf_u.predict(X_train_u)
+	dtree_clf_u.fit(X_train, y_train)
+	y_train_pred_u = dtree_clf_u.predict(X_train)
 	y_test_pred_u = dtree_clf_u.predict(X_test)
 
 	#Calculating f1-score for Train and Test data
-	train_score= metrics.f1_score(y_train_u, y_train_pred_u,average=None)
+	train_score= metrics.f1_score(y_train, y_train_pred_u,average=None)
 	test_score= metrics.f1_score(y_test, y_test_pred_u,average=None)
 
-	train_acc=metrics.accuracy_score(y_train_u, y_train_pred_u)
+	train_acc=metrics.accuracy_score(y_train, y_train_pred_u)
 	test_acc= metrics.accuracy_score(y_test, y_test_pred_u)
 
 	#Prediction on the given set of input values
